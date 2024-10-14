@@ -12,6 +12,7 @@ Patch0:         now_ns_and_no_dropped_frames.patch
 BuildRequires:  cmake >= 3.13.0
 BuildRequires:  python >= 3.6
 BuildRequires:  systemd-rpm-macros
+BuildRequires:  git
 
 BuildRequires:  pkgconfig(opencv)
 BuildRequires:  pkgconfig(libonnxruntime)
