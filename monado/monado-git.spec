@@ -14,6 +14,8 @@ BuildRequires:  cmake >= 3.13.0
 BuildRequires:  python >= 3.6
 BuildRequires:  systemd-rpm-macros
 BuildRequires:  git
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
 
 BuildRequires:  pkgconfig(opencv)
 BuildRequires:  pkgconfig(libonnxruntime)
@@ -35,6 +37,7 @@ BuildRequires:  pkgconfig(hidapi-libusb)
 BuildRequires:  pkgconfig(wayland-client)
 BuildRequires:  pkgconfig(wayland-scanner)
 BuildRequires:  pkgconfig(wayland-protocols)
+BuildRequires:  pkgconfig(xrandr)
 
 %description
 Monado is an open source XR runtime delivering immersive
