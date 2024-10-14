@@ -1,0 +1,38 @@
+diff --git a/src/xrt/auxiliary/util/u_pacing_app.c b/src/xrt/auxiliary/util/u_pacing_app.c
+index bcb8445..c977d0f 100644
+--- a/src/xrt/auxiliary/util/u_pacing_app.c
++++ b/src/xrt/auxiliary/util/u_pacing_app.c
+@@ -463,7 +463,7 @@ pa_predict(struct u_pacing_app *upa,
+ 	// How long we think the frame should take.
+ 	uint64_t frame_time_ns = total_app_time_ns(pa);
+ 	// When should the client wake up.
+-	uint64_t wake_up_time_ns = predict_ns - total_app_and_compositor_time_ns(pa);
++	uint64_t wake_up_time_ns = now_ns;
+ 	// When the client's GPU work should have completed.
+ 	uint64_t gpu_done_time_ns = predict_ns - total_compositor_time_ns(pa);
+ 
+diff --git a/src/xrt/compositor/multi/comp_multi_compositor.c b/src/xrt/compositor/multi/comp_multi_compositor.c
+index dd43722..da5620a 100644
+--- a/src/xrt/compositor/multi/comp_multi_compositor.c
++++ b/src/xrt/compositor/multi/comp_multi_compositor.c
+@@ -182,20 +182,6 @@ wait_for_scheduled_free(struct multi_compositor *mc)
+ 	while (v_mc->scheduled.active) {
+ 		uint64_t now_ns = os_monotonic_get_ns();
+ 
+-		// This frame is for the next frame, drop the old one no matter what.
+-		if (time_is_within_half_ms(mc->progress.data.display_time_ns, mc->slot_next_frame_display)) {
+-			U_LOG_W("%.3fms: Dropping old missed frame in favour for completed new frame",
+-			        time_ns_to_ms_f(now_ns));
+-			break;
+-		}
+-
+-		// Replace the scheduled frame if it's in the past.
+-		if (v_mc->scheduled.data.display_time_ns < now_ns) {
+-			U_LOG_T("%.3fms: Replacing frame for time in past in favour of completed new frame",
+-			        time_ns_to_ms_f(now_ns));
+-			break;
+-		}
+-
+ 		U_LOG_D(
+ 		    "Two frames have completed GPU work and are waiting to be displayed."
+ 		    "\n\tnext frame: %fms (%" PRIu64
